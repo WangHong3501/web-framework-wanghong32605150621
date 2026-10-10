@@ -12,6 +12,7 @@
           v-model="newNote"
           placeholder="输入笔记内容，回车快速添加"
           @keyup.enter="addNote"
+          @keyup.esc="newNote = ''"
         />
         <button class="primary" @click="addNote">添加</button>
       </div>
@@ -45,13 +46,17 @@
       <p v-if="notes.length === 0" class="empty">暂无笔记，快添加一条吧 ✏️</p>
       <p v-show="notes.length > 0" class="count">共 {{ notes.length }} 条</p>
     </div>
+
+    <h2>🎯 事件实验室（2.4—2.5）</h2>
+    <EventLab />
   </div>
 </template>
 
 <script>
 import NoteCard from './components/NoteCard.vue'
+import EventLab from './components/EventLab.vue'
 export default {
-  components: { NoteCard },
+  components: { NoteCard, EventLab },
   data() {
     return {
       newNote: '',
