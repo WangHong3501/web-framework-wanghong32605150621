@@ -1,5 +1,4 @@
-<!-- PropsLab.vue —— 实验 05：父传子 props（3.5）
-     教材例 3-10 同构：PriceBox 接收 price（对象方式声明 + 验证） -->
+
 <template>
   <div class="lab">
     <h2>实验 05｜props 父传子（3.5）</h2>

@@ -1,4 +1,4 @@
-<!-- ScopedChild.vue —— 子组件：也有自己的 .box 类，验证隔离 -->
+
 <template>
   <div class="box">
     子组件 ScopedChild 的 .box（青绿色——没被父组件的蓝色样式染到）

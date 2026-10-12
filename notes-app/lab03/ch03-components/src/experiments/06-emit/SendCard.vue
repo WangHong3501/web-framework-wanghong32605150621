@@ -1,4 +1,4 @@
-<!-- SendCard.vue —— 子组件：emits 声明 + $emit 触发（携带数据） -->
+
 <template>
   <div class="mini">
     <h3>我是子组件 SendCard</h3>

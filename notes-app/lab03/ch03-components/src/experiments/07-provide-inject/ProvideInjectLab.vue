@@ -1,6 +1,4 @@
-<!-- ProvideInjectLab.vue —— 实验 07：跨级传递（3.7）
-     教材例 3-12 同构：爷爷 provide，孙子 inject，中间层零传递。
-     课程选项式：provide() 选项 + inject: []（教材用 provide()/inject() 函数，对照） -->
+ -->
 <template>
   <div class="lab">
     <h2>实验 07｜provide / inject 跨级（3.7）</h2>

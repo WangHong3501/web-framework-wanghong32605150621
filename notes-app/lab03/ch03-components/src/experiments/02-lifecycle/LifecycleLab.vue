@@ -1,4 +1,4 @@
-<!-- LifecycleLab.vue —— 生命周期实验本体：四阶段钩子 + 页面日志 -->
+
 <template>
   <div class="inner">
     <p>count = {{ count }}（点 +1 触发 updated）</p>

@@ -1,4 +1,4 @@
-<!-- LifecycleDemo.vue —— 实验 02 的"开关壳"：v-if 控制挂载/销毁 -->
+
 <template>
   <div class="lab">
     <h2>实验 02｜生命周期（3.2）</h2>

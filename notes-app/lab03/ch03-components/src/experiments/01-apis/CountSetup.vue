@@ -1,4 +1,4 @@
-<!-- 教材【例3-2】组合式：<script setup> + ref，无 this（3.1） -->
+
 <template>
   <div class="mini">
     <h3>组合式 API</h3>

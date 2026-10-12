@@ -1,4 +1,4 @@
-<!-- GrandChild.vue —— 孙组件：inject 直达爷爷的数据 -->
+
 <template>
   <div class="grand">
     <p>我是孙子 GrandChild：爷爷传来的车 = <b>{{ car }}</b>（inject 直达，没经过中间层）</p>

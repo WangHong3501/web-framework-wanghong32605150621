@@ -1,5 +1,4 @@
-<!-- ScopedLab.vue —— 实验 04：样式冲突与隔离（3.4）
-     父子各有同名类 .box；:deep() 演示穿透控制子组件内部 -->
+
 <template>
   <div class="lab">
     <h2>实验 04｜样式冲突与 scoped（3.4）</h2>

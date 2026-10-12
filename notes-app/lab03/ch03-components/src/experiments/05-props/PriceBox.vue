@@ -1,4 +1,4 @@
-<!-- PriceBox.vue —— 子组件：对象方式声明 props + computed（教材例 3-10 同构） -->
+
 <template>
   <div class="mini">
     <h3>PriceBox</h3>

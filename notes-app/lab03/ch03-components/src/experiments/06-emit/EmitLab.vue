@@ -1,5 +1,4 @@
-<!-- EmitLab.vue —— 实验 06：子传父 emit（3.6）
-     课程选项式：emits 选项声明 + this.$emit 触发（教材用 defineEmits，对照） -->
+
 <template>
   <div class="lab">
     <h2>实验 06｜emit 子传父（3.6）</h2>

@@ -1,4 +1,4 @@
-<!-- LocalDemo.vue —— 局部注册演示：App 的 components 选项里注册（3.3.2） -->
+
 <template>
   <div class="mini">
     <h3>局部注册</h3>

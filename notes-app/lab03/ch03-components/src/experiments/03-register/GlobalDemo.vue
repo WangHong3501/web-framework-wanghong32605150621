@@ -1,5 +1,4 @@
-<!-- GlobalDemo.vue —— 全局注册演示：main.js 里 app.component 注册（3.3.1）
-     注意：App.vue 里【没有】import 我、components 里也没有我——照样能用！ -->
+
 <template>
   <div class="mini">
     <h3>全局注册</h3>
