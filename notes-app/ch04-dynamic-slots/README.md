@@ -5,7 +5,7 @@ WEB 前端框架技术（203051）· 第 04 课（4.1—4.5）：动态组件 ·
 ## 运行
 
 ```bat
-cd /d D:\web-framework-wanghong32605150621\notes-app\lab04\ch04-dynamic-slots
+cd /d D:\web-framework-wanghong32605150621\notes-app\ch04-dynamic-slots
 npm install
 npm run dev
 ```
