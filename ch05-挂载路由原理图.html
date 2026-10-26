@@ -1,0 +1,98 @@
+<html style="margin:0;padding:0;">
+<title>挂载路由的原理 app.use(router)</title>
+<div style="width:100%;box-sizing:border-box;background:#f8fafc;font-family:'Segoe UI','Microsoft YaHei',sans-serif;color:#334155;padding:26px 20px;">
+  <div style="max-width:1120px;margin:0 auto;">
+
+    <div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:14px;padding:20px 26px;color:#fff;box-shadow:0 8px 20px rgba(37,99,235,0.22);">
+      <div style="font-size:12.5px;letter-spacing:2px;opacity:.85;font-weight:600;">PRINCIPLE · 挂载路由</div>
+      <div style="font-size:23px;font-weight:700;margin:4px 0;">app.use(router) 到底干了什么？</div>
+      <div style="font-size:14px;opacity:.95;">路由是一个「插件」，use 会调用它的 <b>install(app)</b> —— 注册组件、挂全局属性、注入依赖、启动地址监听</div>
+    </div>
+
+    <!-- ===== Part 1 挂载时序 ===== -->
+    <div style="margin-top:22px;font-size:17px;font-weight:700;color:#1e293b;">① 挂载时序（main.js 里的执行顺序）</div>
+    <div style="display:flex;flex-direction:column;gap:0;margin-top:12px;">
+
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:12px;">
+        <div style="background:#e2e8f0;color:#475569;border-radius:6px;padding:2px 9px;font-size:12px;font-family:Consolas;font-weight:700;">1</div>
+        <div style="font-size:14px;"><code style="font-family:Consolas;color:#1d4ed8;">const app = createApp(App)</code> —— 创建应用实例（此刻还没有路由）</div>
+      </div>
+      <div style="text-align:center;color:#93c5fd;font-size:18px;line-height:1;margin:2px 0;">▼</div>
+
+      <div style="background:#eff6ff;border:1.5px solid #2563eb;border-radius:10px;padding:12px 16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="background:#2563eb;color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-family:Consolas;font-weight:700;">2</div>
+          <div style="font-size:14px;"><code style="font-family:Consolas;color:#1d4ed8;font-weight:700;">app.use(router)</code> —— 安装插件，自动调用 <code style="font-family:Consolas;color:#1d4ed8;font-weight:700;">router.install(app)</code>，做下面 4 件事 ▼</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px;margin-top:11px;">
+          <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:9px 12px;">
+            <div style="font-size:12.5px;font-weight:700;color:#1d4ed8;">① 全局注册组件</div>
+            <div style="font-size:12px;color:#64748b;margin-top:3px;line-height:1.55;">app.component('RouterLink'…)<br>app.component('RouterView'…)<br>→ 所以标签不用 import</div>
+          </div>
+          <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:9px 12px;">
+            <div style="font-size:12.5px;font-weight:700;color:#1d4ed8;">② 挂全局属性</div>
+            <div style="font-size:12px;color:#64748b;margin-top:3px;line-height:1.55;">globalProperties.$router = router<br>globalProperties.$route = 当前<br>→ 所以 this.$router 能用</div>
+          </div>
+          <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:9px 12px;">
+            <div style="font-size:12.5px;font-weight:700;color:#1d4ed8;">③ provide 注入</div>
+            <div style="font-size:12px;color:#64748b;margin-top:3px;line-height:1.55;">app.provide(routerKey, router)<br>→ 组合式 useRouter()/<br>useRoute() 靠 inject 取</div>
+          </div>
+          <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:9px 12px;">
+            <div style="font-size:12.5px;font-weight:700;color:#1d4ed8;">④ 启动路由</div>
+            <div style="font-size:12px;color:#64748b;margin-top:3px;line-height:1.55;">首次导航（解析当前地址）<br>监听 hashchange / popstate<br>→ 接管地址栏</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;color:#93c5fd;font-size:18px;line-height:1;margin:2px 0;">▼</div>
+
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:12px;">
+        <div style="background:#e2e8f0;color:#475569;border-radius:6px;padding:2px 9px;font-size:12px;font-family:Consolas;font-weight:700;">3</div>
+        <div style="font-size:14px;"><code style="font-family:Consolas;color:#1d4ed8;">app.mount('#app')</code> —— 渲染 App.vue，此时 router-link / router-view 已全局可用</div>
+      </div>
+    </div>
+
+    <!-- ===== Part 2 响应式闭环 ===== -->
+    <div style="margin-top:26px;font-size:17px;font-weight:700;color:#1e293b;">② 地址变化 → 视图更新（路由内部的响应式闭环）</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-top:12px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;">
+        <div style="flex:1;min-width:135px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:9px;text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#334155;">地址变化</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px;">点链接 / 前进后退 / 改 hash</div>
+        </div>
+        <div style="display:flex;align-items:center;color:#94a3b8;">→</div>
+        <div style="flex:1;min-width:135px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:9px;text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#334155;">触发事件</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px;">hashchange / popstate</div>
+        </div>
+        <div style="display:flex;align-items:center;color:#94a3b8;">→</div>
+        <div style="flex:1;min-width:135px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:9px;text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#1d4ed8;">匹配路由</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px;">routes 从上往下，得 matched/params/query</div>
+        </div>
+        <div style="display:flex;align-items:center;color:#94a3b8;">→</div>
+        <div style="flex:1;min-width:135px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px;text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#a16207;">跑守卫</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px;">beforeEach，next() 放行</div>
+        </div>
+      </div>
+      <div style="text-align:center;color:#94a3b8;font-size:16px;margin:6px 0;">▼ 放行后</div>
+      <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;">
+        <div style="flex:1;min-width:160px;background:#eff6ff;border:2px solid #2563eb;border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#1d4ed8;">写入响应式 currentRoute</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px;">内部是 ref/reactive，值一改就通知依赖</div>
+        </div>
+        <div style="display:flex;align-items:center;color:#94a3b8;">→</div>
+        <div style="flex:1;min-width:160px;background:#f0fdfa;border:1.5px solid #0d9488;border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#0f766e;">router-view 自动重渲染</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px;">读 matched，用 &lt;component :is&gt; 渲染对应组件</div>
+        </div>
+      </div>
+      <div style="background:#f8fafc;border-radius:8px;padding:9px 12px;margin-top:12px;font-size:12.5px;color:#475569;line-height:1.6;">
+        💡 关键：<b>currentRoute 是响应式的</b>，所以地址一变，依赖它的 router-view 会自动更新——这正是「不刷新整页、只换组件」的底层机制。router-view 内部按 depth 取 matched[depth]，嵌套路由每层各取各的。
+      </div>
+    </div>
+
+    <div style="text-align:center;color:#94a3b8;font-size:12px;margin-top:16px;">挂载路由原理 · 配套第05课 ch05-routing</div>
+  </div>
+</div>
+</html>

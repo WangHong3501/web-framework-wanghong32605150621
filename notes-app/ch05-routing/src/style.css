@@ -1,0 +1,80 @@
+/* ===== 课程设计令牌（蓝白风格）===== */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-bg: #eff6ff;
+  --accent: #0d9488;          /* 青绿色：样式实验里与纯蓝父盒区分 */
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --muted: #94a3b8;
+  --warn: #d4a017;            /* 提示徽章 / 头像描边：插槽案例用 */
+  --text: #334155;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f8fafc;
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+h2 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+p { margin: 4px 0; }
+
+/* 全局按钮 */
+button {
+  font: inherit;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+  transition: all 0.18s;
+}
+button:hover { border-color: var(--primary); color: var(--primary); }
+button:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+/* 全局输入框 */
+input[type="text"],
+input:not([type]),
+input[placeholder] {
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+}
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}

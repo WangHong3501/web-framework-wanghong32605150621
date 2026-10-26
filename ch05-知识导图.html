@@ -1,0 +1,212 @@
+<html style="margin:0;padding:0;">
+<title>第05课 路由 vue-router 知识导图</title>
+<div style="width:100%;box-sizing:border-box;background:#f8fafc;font-family:'Segoe UI','Microsoft YaHei',sans-serif;color:#334155;padding:28px 20px;">
+
+  <!-- ===== Hero ===== -->
+  <div style="max-width:1180px;margin:0 auto;">
+    <div style="background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);border-radius:16px;padding:26px 30px;color:#fff;box-shadow:0 8px 24px rgba(37,99,235,0.25);">
+      <div style="font-size:13px;letter-spacing:2px;opacity:.85;font-weight:600;">第 05 课 · CH05-ROUTING</div>
+      <div style="font-size:28px;font-weight:700;margin:6px 0 4px;">前端路由 vue-router —— 单页应用的"多页面"</div>
+      <div style="font-size:15px;opacity:.95;">一句话：<b>URL 变 → 组件换 → 页面不刷新</b>，这就是 SPA（单页应用）的骨架</div>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:3px 12px;font-size:12.5px;">vue-router 4.6.4</span>
+        <span style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:3px 12px;font-size:12.5px;">选项式 this.$router / $route</span>
+        <span style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:3px 12px;font-size:12.5px;">hash 模式（地址带 #）</span>
+        <span style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:3px 12px;font-size:12.5px;">7 个小实验逐个点亮</span>
+      </div>
+    </div>
+
+    <!-- ===== 1. 为什么 ===== -->
+    <div style="margin-top:26px;display:flex;align-items:center;gap:8px;">
+      <div style="width:6px;height:22px;background:#2563eb;border-radius:3px;"></div>
+      <div style="font-size:19px;font-weight:700;color:#1e293b;">① 为什么需要路由</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:12px;">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;border-top:3px solid #94a3b8;">
+        <div style="font-weight:700;font-size:16px;color:#64748b;">后端路由（早期网站）</div>
+        <div style="font-size:14px;line-height:1.7;margin-top:6px;">URL ↔ <b>服务器上的真实资源</b> 一一对应；地址一变就发请求，服务器返回<b>整个新页面</b> → 每次整页刷新、服务器压力大</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;border-top:3px solid #2563eb;">
+        <div style="font-weight:700;font-size:16px;color:#1d4ed8;">前端路由（本课主角）</div>
+        <div style="font-size:14px;line-height:1.7;margin-top:6px;">URL ↔ <b>页面里的组件</b> 一一对应；地址变了由前端 JS 换组件，<b>不发请求、不整页刷新</b> → 整个站只有一个 HTML</div>
+      </div>
+    </div>
+    <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:10px;padding:10px 14px;margin-top:12px;font-size:13.5px;line-height:1.6;">
+      💡 承接第 4 章：手搓的 <code style="background:#dbeafe;border-radius:4px;padding:0 5px;">&lt;component :is&gt;</code> 已能换组件，但<b>地址栏不动</b>（不能收藏/分享/后退）。路由 = 把它升级成"官方版" <code style="background:#dbeafe;border-radius:4px;padding:0 5px;">&lt;router-view&gt;</code>，还多了传参、守卫、历史记录一整套。
+    </div>
+
+    <!-- ===== 2. 怎么装：五步 ===== -->
+    <div style="margin-top:28px;display:flex;align-items:center;gap:8px;">
+      <div style="width:6px;height:22px;background:#2563eb;border-radius:3px;"></div>
+      <div style="font-size:19px;font-weight:700;color:#1e293b;">② 安装 + 五步接入</div>
+    </div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-top:12px;">
+      <div style="font-size:14px;">安装（必须单独装，不随 Vite 模板自带）：<code style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:5px;padding:2px 8px;color:#1d4ed8;font-family:Consolas,monospace;">npm install vue-router@4</code> <span style="color:#94a3b8;font-size:12.5px;">（Vue3 配 4，别装成 3）</span></div>
+      <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin-top:14px;">
+        <div style="flex:1;min-width:150px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 12px;">
+          <div style="font-size:12px;color:#1d4ed8;font-weight:700;">步骤 1</div>
+          <div style="font-size:13px;margin-top:3px;">建 <code style="font-family:Consolas;">src/router/index.js</code></div>
+        </div>
+        <div style="display:flex;align-items:center;color:#93c5fd;font-size:18px;">→</div>
+        <div style="flex:1;min-width:150px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 12px;">
+          <div style="font-size:12px;color:#1d4ed8;font-weight:700;">步骤 2</div>
+          <div style="font-size:13px;margin-top:3px;"><code style="font-family:Consolas;">createRouter</code> 建路由器</div>
+        </div>
+        <div style="display:flex;align-items:center;color:#93c5fd;font-size:18px;">→</div>
+        <div style="flex:1;min-width:150px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 12px;">
+          <div style="font-size:12px;color:#1d4ed8;font-weight:700;">步骤 3</div>
+          <div style="font-size:13px;margin-top:3px;"><code style="font-family:Consolas;">routes</code> 数组配规则</div>
+        </div>
+        <div style="display:flex;align-items:center;color:#93c5fd;font-size:18px;">→</div>
+        <div style="flex:1;min-width:150px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 12px;">
+          <div style="font-size:12px;color:#1d4ed8;font-weight:700;">步骤 4</div>
+          <div style="font-size:13px;margin-top:3px;">main.js 里 <code style="font-family:Consolas;">use(router)</code></div>
+        </div>
+        <div style="display:flex;align-items:center;color:#93c5fd;font-size:18px;">→</div>
+        <div style="flex:1;min-width:150px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 12px;">
+          <div style="font-size:12px;color:#1d4ed8;font-weight:700;">步骤 5</div>
+          <div style="font-size:13px;margin-top:3px;">放 <code style="font-family:Consolas;">router-link + router-view</code></div>
+        </div>
+      </div>
+      <div style="font-size:12.5px;color:#64748b;margin-top:12px;line-height:1.6;">
+        两种历史模式：<code style="font-family:Consolas;background:#f1f5f9;border-radius:4px;padding:0 5px;">createWebHashHistory()</code>（hash，带 #，本课用）｜ <code style="font-family:Consolas;background:#f1f5f9;border-radius:4px;padding:0 5px;">createWebHistory()</code>（无 #，但部署要服务器配合）。<br>
+        use(router) 之后 router-link / router-view 全局可用，<b>不用 import、不用注册</b>。
+      </div>
+    </div>
+
+    <!-- ===== 3. 七大能力 ===== -->
+    <div style="margin-top:28px;display:flex;align-items:center;gap:8px;">
+      <div style="width:6px;height:22px;background:#2563eb;border-radius:3px;"></div>
+      <div style="font-size:19px;font-weight:700;color:#1e293b;">③ 七大核心能力（对应实验 01—07）</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:12px;">
+
+      <!-- 01 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="background:#2563eb;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.8;font-size:12px;">实验 01</span> · 基础路由</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.75;">
+          <div><code style="font-family:Consolas;color:#1d4ed8;">router-link</code>：导航，渲染成 <code style="font-family:Consolas;">&lt;a&gt;</code>，拦截点击<b>不刷新</b>，自动加 <code style="font-family:Consolas;">router-link-active</code> 高亮</div>
+          <div style="margin-top:6px;"><code style="font-family:Consolas;color:#1d4ed8;">router-view</code>：出口，地址匹配到谁，谁显示在这里</div>
+          <div style="margin-top:6px;color:#64748b;">验证：切换时 Network 零请求 = 前端路由铁证</div>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="background:#2563eb;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.8;font-size:12px;">实验 02</span> · 重定向与 404</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.75;">
+          <div>重定向：<code style="font-family:Consolas;color:#1d4ed8;">{ path:'/', redirect:'/home' }</code> 放<b>最前</b>（值是地址字符串，不是组件）</div>
+          <div style="margin-top:6px;">404 兜底：<code style="font-family:Consolas;color:#1d4ed8;">/:pathMatch(.*)*</code> 通配符<b>殿后</b></div>
+          <div style="margin-top:6px;color:#64748b;">规则从上往下、先到先得；通配符放前面会劫走所有地址</div>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="background:#2563eb;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.8;font-size:12px;">实验 03</span> · 动态路由</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.75;">
+          <div>占位符 <code style="font-family:Consolas;color:#1d4ed8;">/user/:id</code> 一条规则匹配一族（/user/1、/user/9527）</div>
+          <div style="margin-top:6px;">取参：<code style="font-family:Consolas;color:#1d4ed8;">$route.params.id</code>；传参 3 写法：字符串 / :to 拼接 / 对象 path</div>
+          <div style="margin-top:6px;background:#fef3c7;border-radius:6px;padding:5px 9px;font-size:12.5px;">⚠️ 复用坑：/user/1 直达 /user/2 <b>不重挂组件</b>，mounted 只跑一次 → 要 <code style="font-family:Consolas;">watch '$route.params.id'</code></div>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="background:#0d9488;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.85;font-size:12px;">实验 04</span> · 嵌套路由</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.75;">
+          <div>用 <code style="font-family:Consolas;color:#0f766e;">children:[...]</code> 再配子规则，外壳里放<b>第二级</b> router-view</div>
+          <div style="margin-top:6px;">子规则 path <b>不带开头斜杠</b>：<code style="font-family:Consolas;">'profile'</code> 自动拼成 /center/profile</div>
+          <div style="margin-top:6px;">空路径重定向：<code style="font-family:Consolas;">{ path:'', redirect:'/center/profile' }</code></div>
+          <div style="margin-top:6px;color:#64748b;">类比：顶层出口是商场大门，子出口是商场里的店铺（换店铺不换商场）</div>
+        </div>
+      </div>
+
+      <!-- 05 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="background:#0d9488;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.85;font-size:12px;">实验 05</span> · 命名路由</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.75;">
+          <div>规则加 <code style="font-family:Consolas;color:#0f766e;">name:'user'</code>，跳转按名字找：</div>
+          <div style="margin-top:5px;"><code style="font-family:Consolas;color:#0f766e;">:to="{ name:'user', params:{ id:9527 } }"</code></div>
+          <div style="margin-top:6px;background:#f0fdfa;border-radius:6px;padding:5px 9px;font-size:12.5px;">✅ 路径与跳转<b>解耦</b>：把 /user/:id 改成 /member/:id，命名写法一个不用改</div>
+        </div>
+      </div>
+
+      <!-- 06 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="background:#0d9488;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.85;font-size:12px;">实验 06</span> · 编程式导航</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.75;">
+          <div><code style="font-family:Consolas;color:#0f766e;">$router.push(...)</code> 代码跳转（4 写法）；<code style="font-family:Consolas;color:#0f766e;">$router.replace(...)</code> 顶掉历史</div>
+          <div style="margin-top:5px;">push 压栈（能后退）｜replace 后退回不来（登录后防回退表单）</div>
+          <div style="margin-top:5px;">query：<code style="font-family:Consolas;">?kw=vue</code>，用 <code style="font-family:Consolas;color:#0f766e;">$route.query.kw</code> 取</div>
+          <div style="margin-top:5px;color:#b91c1c;font-size:12.5px;">坑：path 与 params 同用，params 被忽略</div>
+        </div>
+      </div>
+
+      <!-- 07 -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;grid-column:1/-1;">
+        <div style="background:#d4a017;color:#fff;padding:10px 16px;font-weight:700;font-size:15px;"><span style="opacity:.9;font-size:12px;">实验 07</span> · 路由守卫（全局前置）</div>
+        <div style="padding:14px 16px;font-size:13.5px;line-height:1.7;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;">
+          <div>
+            <div>每次跳转<b>之前</b>执行：<code style="font-family:Consolas;color:#a16207;">router.beforeEach((to, from, next) =&gt; {...})</code></div>
+            <div style="margin-top:6px;"><code style="font-family:Consolas;">to</code> 去哪 ｜ <code style="font-family:Consolas;">from</code> 从哪来 ｜ <code style="font-family:Consolas;">next</code> 放行函数</div>
+            <div style="margin-top:6px;"><code style="font-family:Consolas;color:#a16207;">next()</code> 放行 ｜ <code style="font-family:Consolas;color:#a16207;">next('/login')</code> 改道登录页</div>
+          </div>
+          <div>
+            <div style="background:#fef3c7;border-radius:6px;padding:6px 10px;font-size:12.5px;">⚠️ <b>每个分支都必须调 next()</b>，忘了调导航直接卡死、点什么都没反应</div>
+            <div style="margin-top:6px;color:#64748b;">场景：/center 是会员区，查 localStorage 有没有 token：有→放行，无→拦去 /login；判断用 startsWith 覆盖子路由</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 4. 易混点 ===== -->
+    <div style="margin-top:28px;display:flex;align-items:center;gap:8px;">
+      <div style="width:6px;height:22px;background:#2563eb;border-radius:3px;"></div>
+      <div style="font-size:19px;font-weight:700;color:#1e293b;">④ 最高频易混点</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:12px;">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;">
+        <div style="font-weight:700;font-size:15px;margin-bottom:8px;">$router vs $route（一字之差）</div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;background:#eff6ff;border-radius:9px;padding:10px;text-align:center;">
+            <div style="font-size:22px;">🚗</div>
+            <div style="font-weight:700;color:#1d4ed8;font-size:14px;">$router</div>
+            <div style="font-size:12.5px;color:#64748b;margin-top:3px;">开车：push / replace 跳转方法</div>
+          </div>
+          <div style="flex:1;background:#f0fdfa;border-radius:9px;padding:10px;text-align:center;">
+            <div style="font-size:22px;">🧭</div>
+            <div style="font-weight:700;color:#0f766e;font-size:14px;">$route</div>
+            <div style="font-size:12.5px;color:#64748b;margin-top:3px;">问路：params / query 当前地址</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;">
+        <div style="font-weight:700;font-size:15px;margin-bottom:8px;">params vs query（考点）</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <tr style="background:#f8fafc;"><th style="border:1px solid #e2e8f0;padding:5px;text-align:left;"></th><th style="border:1px solid #e2e8f0;padding:5px;text-align:left;color:#1d4ed8;">params</th><th style="border:1px solid #e2e8f0;padding:5px;text-align:left;color:#0f766e;">query</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:5px;">位置</td><td style="border:1px solid #e2e8f0;padding:5px;">/user/9527</td><td style="border:1px solid #e2e8f0;padding:5px;">/search?kw=vue</td></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:5px;">要配规则</td><td style="border:1px solid #e2e8f0;padding:5px;">要 :id</td><td style="border:1px solid #e2e8f0;padding:5px;">不要</td></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:5px;">取值</td><td style="border:1px solid #e2e8f0;padding:5px;">$route.params.id</td><td style="border:1px solid #e2e8f0;padding:5px;">$route.query.kw</td></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:5px;">搭配</td><td style="border:1px solid #e2e8f0;padding:5px;">只配 name</td><td style="border:1px solid #e2e8f0;padding:5px;">path/name 都行</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== 口诀 ===== -->
+    <div style="margin-top:24px;background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:12px;padding:18px 22px;color:#e2e8f0;">
+      <div style="font-weight:700;color:#fff;font-size:15px;margin-bottom:8px;">🧠 记忆口诀</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 18px;font-size:13.5px;line-height:1.7;">
+        <div>· 问路 <b style="color:#60a5fa;">route</b>，开车 <b style="color:#60a5fa;">router</b></div>
+        <div>· redirect 放<b style="color:#fbbf24;">最前</b>，通配符<b style="color:#fbbf24;">殿后</b></div>
+        <div>· 动态参数 <b style="color:#60a5fa;">params</b>，问号参数 <b style="color:#2dd4bf;">query</b></div>
+        <div>· 复用不重挂，参数变化找 <b style="color:#60a5fa;">watch</b></div>
+        <div>· 嵌套 <b style="color:#2dd4bf;">children</b>，子 path 不带斜杠</div>
+        <div>· 守卫 <b style="color:#fbbf24;">to / from / next</b>，忘调 next 卡死</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;color:#94a3b8;font-size:12px;margin-top:18px;">第05课 路由 vue-router 知识导图 · 配套实验 ch05-routing</div>
+  </div>
+</div>
+</html>
